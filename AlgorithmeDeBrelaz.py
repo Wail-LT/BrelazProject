@@ -1,4 +1,5 @@
 
+#MatBool pour une dimension n retourne après vérification une matrice carrée mat non orientée de dimension ne saisit pas l'utilisateur
 def MatBool(n): #Beaucoups de verification car cette fonction sera utilisé par l'utilisateur
 
         n=int(n)
@@ -42,7 +43,7 @@ def MatBool(n): #Beaucoups de verification car cette fonction sera utilisé par 
         print("\n\n\n\n")
         return matrice
 
-
+#Deg: pour une matrice mat retourne une liste avec les degrés de chaque sommet
 def Deg(mat):   #peu de verification car l'utilisateur n'aura pas accès à cette fonction
 
         degres=[]
@@ -55,6 +56,7 @@ def Deg(mat):   #peu de verification car l'utilisateur n'aura pas accès à cett
                 n+=1
         return degres
 
+#InitBrelaz: pour une matrice mat retourne un liste contenant les sommets classé par ordres décroissant selon leurs degrés
 def InitBrelaz(mat) :   #peu de verification car l'utilisateur n'aura pas accès à cette fonction
 	
         sommetd=[]
@@ -72,25 +74,10 @@ def InitBrelaz(mat) :   #peu de verification car l'utilisateur n'aura pas accès
                                 position+=1
                 sommetd.append(position)
         
-        return sommetd      
-def InitBrelaz2(mat):    #peu de verification car l'utilisateur n'aura pas accès à cette fonction
+        return sommetd
 
-        degres=Deg(mat)[:]
-        degresIndex=[]
-        for i in range(len(degres)):
-                degresIndex.append([degres[i],i])
-        for i in range(len(degres)):
-                for j in range(i,len(degresIndex)):
-                        if (degresIndex[i][0]<degresIndex[j][0]):
-                                a=degresIndex[i]
-                                degresIndex[i]=degresIndex[j]
-                                degresIndex[j]=a
-        for i in range(len(degres)):
-                degres[i]=degresIndex[i][1]
-        return(degres)
-
-
-def lien(mat,index):          #peu de verification car l'utilisateur n'aura pas accès à cette fonction
+#Lien: pour une matrice mat et un sommet index retourne un liste des sommets auquel est connecté le sommet index
+def Lien(mat,index):          #peu de verification car l'utilisateur n'aura pas accès à cette fonction
 
         if (index < len(mat) and index >=0):
                 lien=[]
@@ -101,11 +88,11 @@ def lien(mat,index):          #peu de verification car l'utilisateur n'aura pas 
         else:
                 print ("ERREUR : l'index entré est invalide")
 
-
-def colorier(mat,index,sommetcol,coul,brelaz):
+#Colorier: Pour une matrice mat retourne une couleur possible pour un sommet lors de l'exécution de la fonction Brelaz(mat)
+def Colorier(mat,index,sommetcol,coul,brelaz):
         memecoul=False
         colMax=0
-        liee=lien(mat,index)
+        liee=Lien(mat,index)
         for i in coul:
                 if (i>colMax):
                         colMax=i 
@@ -120,7 +107,7 @@ def colorier(mat,index,sommetcol,coul,brelaz):
         return colMax+1
                 
 
-
+#Brelaz: Exécute l'algorithme de Brelaz et retourne un dictionnaire X contenant les couleurs de chaque sommet et le résultat de l'algorithme
 def Brelaz(mat):       #peu de verification car l'utilisateur n'aura pas accès à cette fonction
 
         degres=Deg(mat)
@@ -152,9 +139,9 @@ def Brelaz(mat):       #peu de verification car l'utilisateur n'aura pas accès 
                                 gDegres+=1
                         
                                         
-                coul[gDegres]=colorier(mat,brelaz[0][gDegres],sommetcol,coul,brelaz)
+                coul[gDegres]=Colorier(mat,brelaz[0][gDegres],sommetcol,coul,brelaz)
                 sommetcol.append(brelaz[0][gDegres])
-                liee=lien(mat,brelaz[0][gDegres])
+                liee=Lien(mat,brelaz[0][gDegres])
                 for j in range(len(sommetDec)):
                         if (j != gDegres and brelaz[0][j] in liee and brelaz[0][j] not in sommetcol):
                                 try:
@@ -169,12 +156,13 @@ def Brelaz(mat):       #peu de verification car l'utilisateur n'aura pas accès 
         for i in coul:
                 if (i==0):
                         j=coul.index(i)
-                        coul[j]=colorier(mat,brelaz[0][j],sommetcol,coul,brelaz)
+                        coul[j]=Colorier(mat,brelaz[0][j],sommetcol,coul,brelaz)
                         sommetcol.append(j)
         X["tab"]=brelaz
         X["coul"]=coul
         return X
 
+#AffBrelaz: comme son nom l'indique affiche le résultat de la fonction Brelaz(mat) 
 def AffBrelaz(X):       #peu de verification car l'utilisateur n'aura pas accès à cette fonction
 
         print ("voici le tabelau resultant de l'algorithme de Brelaz \"*\" signifie que le sommet a été colorié la derniere ligne correspond aux couleurs : \n\n\n")
@@ -189,7 +177,7 @@ def AffBrelaz(X):       #peu de verification car l'utilisateur n'aura pas accès
 
 
 
-#main
+#main Permets la saisie de la taille de la matrice carrée avec vérification ainsi que l'exécution et l'affichage de l'algorithme
 
 n=input("saisir la taille de la matrice : ")
 erreur = False
